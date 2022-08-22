@@ -1,0 +1,5 @@
+# Sensitive files
+output/*.csv
+input/data/*.csv
+input/data/P21/
+.env
