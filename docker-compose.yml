@@ -1,0 +1,21 @@
+version: "3.7"
+
+services:
+
+  p21-to-omop-pentaho:
+    image: cr.ukdd.de/pub/etl/pentaho:9.3.0
+    entrypoint: ./kitchen.sh
+    command: -file=/pentaho/jobs/Job#.kjb
+    container_name: p21-to-omop-pentaho
+    volumes:
+      - ./kettle.properties:/home/pentaho/.kettle/kettle.properties
+      - ./jobs:/pentaho/jobs
+      - ./input:/pentaho/input
+    environment:
+      OPT: -DDATABASE_IP=${DATABASE_IP} -DDATABASE_PORT=${DATABASE_PORT} -DDATABASE_SCHEMA=${DATABASE_SCHEMA} -DDATABASE_USER=${DATABASE_USER} -DDATABASE_NAME=${DATABASE_NAME} -DDATABASE_PASSWORD=${DATABASE_PASSWORD} -DVAR_PARALLEL=${VAR_PARALLEL}
+      PENTAHO_DI_JAVA_OPTIONS: -${INIT_MEMORY} -${MAX_MEMORY}
+
+networks:
+  default:
+    external:
+      name: ${OMOP_NETWORK}
